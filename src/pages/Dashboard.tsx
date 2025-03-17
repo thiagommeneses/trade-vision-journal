@@ -114,7 +114,7 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <div className="container mx-auto p-4 pt-20 pb-20 animate-fade-in">
+      <div className="w-full animate-fade-in">
         <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
           <Select 
             value={filterPeriod} 
