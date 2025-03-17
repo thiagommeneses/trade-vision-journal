@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -9,7 +10,18 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowDownRight, ArrowUpRight, BarChart3, CalendarDays, Search, Target, TrendingDown, TrendingUp, Filter } from "lucide-react";
+import { 
+  ArrowDownRight, 
+  ArrowUpRight, 
+  BarChart3, 
+  CalendarDays, 
+  ListChecks, 
+  Search, 
+  Target, 
+  TrendingDown, 
+  TrendingUp, 
+  Filter 
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const recentTrades = [
