@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,19 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				profit: {
+					DEFAULT: 'hsl(var(--profit))',
+					foreground: 'hsl(var(--profit-foreground))'
+				},
+				loss: {
+					DEFAULT: 'hsl(var(--loss))',
+					foreground: 'hsl(var(--loss-foreground))'
+				},
+				neutral: {
+					DEFAULT: 'hsl(var(--neutral))',
+					foreground: 'hsl(var(--neutral-foreground))'
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,11 +97,54 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' }
+				},
+				'fade-out': {
+					'0%': { opacity: '1' },
+					'100%': { opacity: '0' }
+				},
+				'slide-in-right': {
+					'0%': { transform: 'translateX(100%)' },
+					'100%': { transform: 'translateX(0)' }
+				},
+				'slide-out-right': {
+					'0%': { transform: 'translateX(0)' },
+					'100%': { transform: 'translateX(100%)' }
+				},
+				'slide-in-left': {
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(0)' }
+				},
+				'slide-out-left': {
+					'0%': { transform: 'translateX(0)' },
+					'100%': { transform: 'translateX(-100%)' }
+				},
+				'slide-in-top': {
+					'0%': { transform: 'translateY(-100%)' },
+					'100%': { transform: 'translateY(0)' }
+				},
+				'slide-out-top': {
+					'0%': { transform: 'translateY(0)' },
+					'100%': { transform: 'translateY(-100%)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.3s ease-in-out',
+				'fade-out': 'fade-out 0.3s ease-in-out',
+				'slide-in-right': 'slide-in-right 0.3s ease-in-out',
+				'slide-out-right': 'slide-out-right 0.3s ease-in-out',
+				'slide-in-left': 'slide-in-left 0.3s ease-in-out',
+				'slide-out-left': 'slide-out-left 0.3s ease-in-out',
+				'slide-in-top': 'slide-in-top 0.3s ease-in-out',
+				'slide-out-top': 'slide-out-top 0.3s ease-in-out'
+			},
+			backdropBlur: {
+				xs: '2px',
 			}
 		}
 	},
