@@ -1,11 +1,12 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { useAuth } from "@/hooks/useAuth";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -14,11 +15,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { EyeIcon, EyeOffIcon, Lock } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 // Form schema
-const formSchema = z.object({
+const loginSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
@@ -30,92 +30,99 @@ const formSchema = z.object({
 const Index = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [loginError, setLoginError] = useState("");
 
-  // Initialize form
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  // Set up form
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "demo@example.com",
-      password: "password",
+      email: "",
+      password: "",
     },
   });
 
   // Form submission
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     setIsLoading(true);
-    setLoginError("");
-
+    
     try {
       const success = await login(values.email, values.password);
+      
       if (success) {
+        toast({
+          title: "Login successful",
+          description: "Welcome to your Trading Diary",
+        });
         navigate("/dashboard");
       } else {
-        setLoginError("Invalid email or password. Please try again.");
+        toast({
+          title: "Login failed",
+          description: "Invalid email or password. Try demo@example.com / password",
+          variant: "destructive",
+        });
       }
     } catch (error) {
-      setLoginError("An unexpected error occurred. Please try again.");
+      toast({
+        title: "An error occurred",
+        description: "Please try again later",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Toggle password visibility
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      {/* Left Side - Background */}
-      <div className="bg-primary flex-1 hidden md:flex md:flex-col md:justify-center md:items-center p-8 text-white animate-fade-in">
-        <div className="max-w-md">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">Day Trading Diary System</h1>
-          <p className="text-lg opacity-90 mb-6">
-            Track, analyze, and improve your trading performance with our minimalist and intuitive diary system.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div className="flex items-center space-x-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
-              <p>Performance Analytics</p>
+      {/* Left Panel - Hero/Feature Display */}
+      <div className="bg-primary text-primary-foreground md:w-1/2 p-8 flex flex-col justify-center">
+        <div className="max-w-md mx-auto">
+          <div className="mb-6">
+            <div className="w-12 h-12 rounded-full bg-primary-foreground flex items-center justify-center mb-4">
+              <span className="text-primary font-bold text-xl">DT</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
-              <p>Trade Entry Journaling</p>
+            <h1 className="text-3xl font-bold mb-2">Day Trading Diary</h1>
+            <p className="text-primary-foreground/80">
+              Your complete solution for tracking, analyzing, and improving your trading performance.
+            </p>
+          </div>
+          
+          <div className="space-y-6">
+            <div className="bg-primary-foreground/10 p-4 rounded-lg">
+              <h3 className="font-medium text-primary-foreground mb-2">Track Your Trades</h3>
+              <p className="text-sm text-primary-foreground/80">
+                Record detailed trade information including entry/exit prices, reasons, and emotional state.
+              </p>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
-              <p>Emotional Analysis</p>
+            
+            <div className="bg-primary-foreground/10 p-4 rounded-lg">
+              <h3 className="font-medium text-primary-foreground mb-2">Analyze Performance</h3>
+              <p className="text-sm text-primary-foreground/80">
+                Visualize your trading performance with comprehensive charts and metrics.
+              </p>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
-              <p>Goal Tracking</p>
+            
+            <div className="bg-primary-foreground/10 p-4 rounded-lg">
+              <h3 className="font-medium text-primary-foreground mb-2">Market Insights</h3>
+              <p className="text-sm text-primary-foreground/80">
+                Access real-time market data for Mini Índice and Mini Dólar on B3.
+              </p>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Right Side - Login Form */}
-      <div className="flex-1 flex flex-col justify-center items-center p-6 md:p-8 animate-fade-in">
-        <div className="w-full max-w-md space-y-8">
+      
+      {/* Right Panel - Login Form */}
+      <div className="bg-background md:w-1/2 p-8 flex items-center justify-center">
+        <div className="w-full max-w-md space-y-6">
           <div className="text-center mb-8">
-            <div className="mx-auto w-12 h-12 rounded-full bg-primary flex items-center justify-center mb-4">
-              <Lock className="h-6 w-6 text-white" />
-            </div>
-            <h2 className="text-2xl font-semibold tracking-tight">Welcome back</h2>
+            <h2 className="text-2xl font-bold">Login to Your Account</h2>
             <p className="text-muted-foreground mt-2">
-              Sign in to access your trading diary
+              Enter your credentials to access your trading diary
             </p>
           </div>
-
-          {loginError && (
-            <div className="bg-destructive/10 text-destructive px-4 py-3 rounded-md text-sm">
-              {loginError}
-            </div>
-          )}
-
+          
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
@@ -125,60 +132,46 @@ const Index = () => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="you@example.com" {...field} />
+                      <Input 
+                        placeholder="youremail@example.com" 
+                        type="email"
+                        {...field} 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
+              
               <FormField
                 control={form.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Password</FormLabel>
-                    <div className="relative">
-                      <FormControl>
-                        <Input
-                          type={showPassword ? "text" : "password"}
-                          placeholder="••••••••"
-                          {...field}
-                        />
-                      </FormControl>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-1 top-1"
-                        onClick={togglePasswordVisibility}
-                      >
-                        {showPassword ? (
-                          <EyeOffIcon className="h-4 w-4" />
-                        ) : (
-                          <EyeIcon className="h-4 w-4" />
-                        )}
-                      </Button>
-                    </div>
+                    <FormControl>
+                      <Input 
+                        placeholder="Enter your password" 
+                        type="password"
+                        {...field} 
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
-              <div className="text-sm text-center text-muted-foreground">
-                <p>Demo credentials:</p>
-                <p>Email: demo@example.com | Password: password</p>
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full py-6"
-                disabled={isLoading}
-              >
-                {isLoading ? "Signing in..." : "Sign in"}
+              
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? "Logging in..." : "Login"}
               </Button>
             </form>
           </Form>
+          
+          <div className="text-center space-y-2">
+            <p className="text-sm text-muted-foreground">
+              Demo credentials: <span className="font-medium">demo@example.com / password</span>
+            </p>
+          </div>
         </div>
       </div>
     </div>

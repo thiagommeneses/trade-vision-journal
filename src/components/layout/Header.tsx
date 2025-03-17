@@ -1,7 +1,9 @@
 
 import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   DropdownMenu,
@@ -10,8 +12,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Bell, ChevronDown, Menu, Settings, LogOut } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { 
+  Bell, 
+  ChevronDown, 
+  Menu, 
+  Settings, 
+  LogOut,
+  Search,
+  Calendar,
+  Filter
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface HeaderProps {
   onMenuToggle: () => void;
@@ -20,8 +31,12 @@ interface HeaderProps {
 export function Header({ onMenuToggle }: HeaderProps) {
   const { user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [scrolled, setScrolled] = useState(false);
   const [pageTitle, setPageTitle] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Update page title based on current route
   useEffect(() => {
@@ -29,16 +44,22 @@ export function Header({ onMenuToggle }: HeaderProps) {
     
     if (path === "/dashboard") {
       setPageTitle("Dashboard");
+      setShowSearch(false);
     } else if (path === "/trade-entry") {
       setPageTitle("Add New Diary Entry");
+      setShowSearch(false);
     } else if (path === "/market-panorama") {
       setPageTitle("Market Panorama");
+      setShowSearch(true);
     } else if (path === "/extra-material") {
       setPageTitle("Extra Material");
+      setShowSearch(true);
     } else if (path === "/settings") {
       setPageTitle("Settings");
+      setShowSearch(false);
     } else {
       setPageTitle("Day Trading Diary");
+      setShowSearch(false);
     }
   }, [location]);
 
@@ -56,11 +77,33 @@ export function Header({ onMenuToggle }: HeaderProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Handle logout
+  const handleLogout = () => {
+    logout();
+    toast({
+      title: "Logged out successfully",
+      description: "You have been logged out of your account",
+    });
+    navigate("/");
+  };
+
+  // Handle search
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      toast({
+        title: "Search",
+        description: `Searching for "${searchQuery}"`,
+      });
+      // Implement actual search functionality here
+    }
+  };
+
   return (
     <header 
       className={`fixed top-0 right-0 left-0 z-30 transition-all duration-300 ${
         scrolled 
-          ? "glass shadow-sm py-2" 
+          ? "bg-background/95 backdrop-blur-sm shadow-sm py-2" 
           : "bg-transparent py-4"
       }`}
     >
@@ -75,6 +118,38 @@ export function Header({ onMenuToggle }: HeaderProps) {
             <Menu size={20} />
           </Button>
           <h1 className="text-xl font-medium hidden sm:block">{pageTitle}</h1>
+        </div>
+        
+        <div className="flex-1 max-w-md mx-4 hidden md:block">
+          {showSearch && (
+            <form onSubmit={handleSearch} className="relative">
+              <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder={`Search ${pageTitle.toLowerCase()}...`}
+                className="pl-9 pr-12"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <div className="absolute right-3 top-2.5 flex items-center">
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-5 w-5 text-muted-foreground hover:text-foreground"
+                >
+                  <Filter size={14} />
+                </Button>
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-5 w-5 text-muted-foreground hover:text-foreground"
+                >
+                  <Calendar size={14} />
+                </Button>
+              </div>
+            </form>
+          )}
         </div>
         
         <div className="flex items-center space-x-2">
@@ -100,22 +175,23 @@ export function Header({ onMenuToggle }: HeaderProps) {
                   <ChevronDown size={16} />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem className="py-2">
-                  <div className="flex flex-col">
-                    <span className="font-medium">{user.name}</span>
-                    <span className="text-xs text-muted-foreground">{user.email}</span>
-                  </div>
-                </DropdownMenuItem>
+              <DropdownMenuContent align="end" className="w-56">
+                <div className="px-2 py-1.5">
+                  <p className="text-sm font-medium">{user.name}</p>
+                  <p className="text-xs text-muted-foreground">{user.email}</p>
+                </div>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer">
+                <DropdownMenuItem 
+                  className="cursor-pointer"
+                  onClick={() => navigate("/settings")}
+                >
                   <Settings size={16} className="mr-2" />
                   <span>Settings</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem 
                   className="cursor-pointer text-destructive focus:text-destructive" 
-                  onClick={logout}
+                  onClick={handleLogout}
                 >
                   <LogOut size={16} className="mr-2" />
                   <span>Logout</span>
@@ -125,6 +201,31 @@ export function Header({ onMenuToggle }: HeaderProps) {
           )}
         </div>
       </div>
+      
+      {/* Mobile search */}
+      {showSearch && (
+        <div className="md:hidden px-4 pb-2 pt-1">
+          <form onSubmit={handleSearch} className="relative">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder={`Search ${pageTitle.toLowerCase()}...`}
+              className="pl-9 pr-12"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <div className="absolute right-3 top-2.5 flex items-center">
+              <Button 
+                type="button" 
+                variant="ghost" 
+                size="icon" 
+                className="h-5 w-5 text-muted-foreground hover:text-foreground"
+              >
+                <Filter size={14} />
+              </Button>
+            </div>
+          </form>
+        </div>
+      )}
     </header>
   );
 }

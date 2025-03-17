@@ -8,6 +8,9 @@ import { AuthProvider } from "@/hooks/useAuth";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import TradeEntry from "./pages/TradeEntry";
+import MarketPanorama from "./pages/MarketPanorama";
+import ExtraMaterial from "./pages/ExtraMaterial";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +26,9 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/trade-entry" element={<TradeEntry />} />
+            <Route path="/market-panorama" element={<MarketPanorama />} />
+            <Route path="/extra-material" element={<ExtraMaterial />} />
+            <Route path="/settings" element={<Settings />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
