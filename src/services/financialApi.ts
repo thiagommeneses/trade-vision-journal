@@ -220,7 +220,7 @@ export const fetchVIX = async (): Promise<VIXData> => {
   }
 };
 
-export const fetchFinancialNews = async (): NewsItem[] => {
+export const fetchFinancialNews = async (): Promise<NewsItem[]> => {
   console.log('Fetching real financial news...');
   
   try {
