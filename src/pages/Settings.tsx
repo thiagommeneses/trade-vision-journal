@@ -17,6 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -297,17 +298,17 @@ const Settings = () => {
                   <form className="space-y-4">
                     <div className="space-y-4">
                       <div className="grid gap-2">
-                        <FormLabel>Current Password</FormLabel>
+                        <Label>Current Password</Label>
                         <Input type="password" />
                       </div>
                       
                       <div className="grid gap-2">
-                        <FormLabel>New Password</FormLabel>
+                        <Label>New Password</Label>
                         <Input type="password" />
                       </div>
                       
                       <div className="grid gap-2">
-                        <FormLabel>Confirm New Password</FormLabel>
+                        <Label>Confirm New Password</Label>
                         <Input type="password" />
                       </div>
                     </div>
