@@ -52,30 +52,6 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
-
-    /* Apple-inspired Liquid Glass System */
-    --glass-bg-primary: rgba(255, 255, 255, 0.08);
-    --glass-bg-secondary: rgba(255, 255, 255, 0.05);
-    --glass-bg-tertiary: rgba(255, 255, 255, 0.03);
-    --glass-border-primary: rgba(255, 255, 255, 0.15);
-    --glass-border-secondary: rgba(255, 255, 255, 0.08);
-    --glass-shadow-primary: rgba(0, 0, 0, 0.1);
-    --glass-shadow-elevated: rgba(0, 0, 0, 0.15);
-    --glass-glow: rgba(59, 130, 246, 0.2);
-    
-    /* Apple-style spacing and sizing */
-    --spacing-xs: 4px;
-    --spacing-sm: 8px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-    --spacing-xl: 32px;
-    --spacing-2xl: 48px;
-    
-    /* Apple blur system */
-    --blur-light: 8px;
-    --blur-medium: 16px;
-    --blur-heavy: 24px;
-    --blur-ultra: 40px;
   }
 
   .dark {
@@ -124,16 +100,6 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
-
-    /* Dark Apple-inspired Liquid Glass System */
-    --glass-bg-primary: rgba(0, 0, 0, 0.15);
-    --glass-bg-secondary: rgba(0, 0, 0, 0.08);
-    --glass-bg-tertiary: rgba(0, 0, 0, 0.05);
-    --glass-border-primary: rgba(255, 255, 255, 0.12);
-    --glass-border-secondary: rgba(255, 255, 255, 0.06);
-    --glass-shadow-primary: rgba(0, 0, 0, 0.25);
-    --glass-shadow-elevated: rgba(0, 0, 0, 0.4);
-    --glass-glow: rgba(59, 130, 246, 0.15);
   }
 }
 
@@ -150,172 +116,16 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
-    background: 
-      radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.03) 0%, transparent 50%),
-      linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%);
-    min-height: 100vh;
-    overflow-x: hidden;
   }
   
-  /* Apple-inspired Liquid Glass System */
-  .apple-glass-primary {
-    background: var(--glass-bg-primary);
-    backdrop-filter: blur(var(--blur-medium)) saturate(180%);
-    -webkit-backdrop-filter: blur(var(--blur-medium)) saturate(180%);
-    border: 1px solid var(--glass-border-primary);
-    box-shadow: 
-      0 8px 32px var(--glass-shadow-primary),
-      0 1px 0 rgba(255, 255, 255, 0.1) inset,
-      0 -1px 0 rgba(0, 0, 0, 0.1) inset;
-  }
-  
-  .apple-glass-secondary {
-    background: var(--glass-bg-secondary);
-    backdrop-filter: blur(var(--blur-light)) saturate(150%);
-    -webkit-backdrop-filter: blur(var(--blur-light)) saturate(150%);
-    border: 1px solid var(--glass-border-secondary);
-    box-shadow: 0 4px 16px var(--glass-shadow-primary);
-  }
-  
-  .apple-glass-elevated {
-    background: var(--glass-bg-primary);
-    backdrop-filter: blur(var(--blur-heavy)) saturate(200%);
-    -webkit-backdrop-filter: blur(var(--blur-heavy)) saturate(200%);
-    border: 1px solid var(--glass-border-primary);
-    box-shadow: 
-      0 16px 64px var(--glass-shadow-elevated),
-      0 2px 0 rgba(255, 255, 255, 0.15) inset,
-      0 -2px 0 rgba(0, 0, 0, 0.1) inset;
-  }
-  
-  .apple-glass-ultra {
-    background: var(--glass-bg-tertiary);
-    backdrop-filter: blur(var(--blur-ultra)) saturate(220%);
-    -webkit-backdrop-filter: blur(var(--blur-ultra)) saturate(220%);
-    border: 1px solid var(--glass-border-primary);
-    box-shadow: 
-      0 32px 128px var(--glass-shadow-elevated),
-      0 0 40px var(--glass-glow),
-      0 4px 0 rgba(255, 255, 255, 0.2) inset;
-  }
-  
-  /* Apple-style Interactions */
-  .apple-hover {
-    @apply transition-all duration-300 ease-out;
-  }
-  
-  .apple-hover:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 
-      0 20px 80px var(--glass-shadow-elevated),
-      0 0 60px var(--glass-glow),
-      0 4px 0 rgba(255, 255, 255, 0.2) inset;
-  }
-  
-  .apple-press:active {
-    transform: translateY(0) scale(0.98);
-    transition-duration: 100ms;
-  }
-  
-  .apple-glow {
-    position: relative;
-  }
-  
-  .apple-glow::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    padding: 1px;
-    background: linear-gradient(45deg, var(--glass-glow), transparent, var(--glass-glow));
-    border-radius: inherit;
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: xor;
-    -webkit-mask-composite: xor;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  
-  .apple-glow:hover::before {
-    opacity: 1;
-  }
-  
-  /* Floating Animation */
-  .floating {
-    animation: floating 3s ease-in-out infinite;
-  }
-  
-  @keyframes floating {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-  }
-  
-  /* Pulse Glow Effect */
-  .pulse-glow {
-    animation: pulse-glow 2s ease-in-out infinite alternate;
-  }
-  
-  @keyframes pulse-glow {
-    from {
-      box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-    }
-    to {
-      box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
-    }
-  }
-  
-  /* Data Visualization Enhancements */
-  .metric-positive {
-    @apply text-profit;
-    text-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
-  }
-  
-  .metric-negative {
-    @apply text-loss;
-    text-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
-  }
-  
-  /* Apple Glass Utility Classes */
+  /* Glass effect components */
   .glass {
-    @apply apple-glass-primary;
+    @apply bg-white/80 dark:bg-black/30 backdrop-blur-md border border-white/20 dark:border-white/10;
   }
   
   .glass-card {
-    @apply apple-glass-primary rounded-2xl;
+    @apply glass rounded-lg shadow-sm;
   }
-  
-  .glass-elevated {
-    @apply apple-glass-elevated rounded-3xl;
-  }
-  
-  .glass-ultra {
-    @apply apple-glass-ultra rounded-3xl;
-  }
-  
-  /* Apple Typography */
-  .apple-title {
-    @apply text-2xl font-semibold tracking-tight;
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-  }
-  
-  .apple-subtitle {
-    @apply text-lg font-medium tracking-tight text-muted-foreground;
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-  }
-  
-  .apple-body {
-    @apply text-sm font-normal;
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
-  }
-  
-  /* Apple Spacing System */
-  .apple-spacing-xs { @apply p-1; }
-  .apple-spacing-sm { @apply p-2; }
-  .apple-spacing-md { @apply p-4; }
-  .apple-spacing-lg { @apply p-6; }
-  .apple-spacing-xl { @apply p-8; }
-  .apple-spacing-2xl { @apply p-12; }
   
   /* Transition for page changes */
   .page-transition-enter {
@@ -345,7 +155,6 @@
   
   ::-webkit-scrollbar-thumb {
     @apply bg-muted rounded-full;
-    background: var(--glass-bg);
   }
   
   ::-webkit-scrollbar-thumb:hover {
