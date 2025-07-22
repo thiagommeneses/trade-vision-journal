@@ -23,6 +23,7 @@ import {
   Filter
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 interface HeaderProps {
   onMenuToggle: () => void;
@@ -101,11 +102,13 @@ export function Header({ onMenuToggle }: HeaderProps) {
 
   return (
     <header 
-      className={`fixed top-0 right-0 left-0 z-30 transition-all duration-300 ${
+      className={cn(
+        "fixed top-0 right-0 z-30 transition-all duration-300",
+        "left-0 lg:left-64",
         scrolled 
           ? "bg-background/95 backdrop-blur-sm shadow-sm py-2" 
           : "bg-transparent py-4"
-      }`}
+      )}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
         <div className="flex items-center space-x-4">

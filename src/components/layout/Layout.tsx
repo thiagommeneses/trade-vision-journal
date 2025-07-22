@@ -15,13 +15,15 @@ export function Layout({ children }: LayoutProps) {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="min-h-screen bg-background">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
-      <div className={`flex-1 flex flex-col transition-all duration-300 ${sidebarOpen ? "lg:ml-64" : ""}`}>
+      <div className={`flex flex-col min-h-screen transition-all duration-300 ${
+        sidebarOpen ? "" : "lg:ml-64"
+      }`}>
         <Header onMenuToggle={toggleSidebar} />
-        <main className="flex-1 pt-16">
-          <div className={`w-full p-4 ${sidebarOpen ? "lg:pl-4" : "lg:pl-4"}`}>
+        <main className="flex-1 pt-16 lg:pt-20">
+          <div className="w-full p-4 lg:p-6">
             {children}
           </div>
         </main>
