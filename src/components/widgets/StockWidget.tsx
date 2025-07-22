@@ -28,34 +28,42 @@ export function StockWidget({ symbol, name, className }: StockWidgetProps) {
   const isNeutral = data.change === 0;
 
   return (
-    <div className={cn("liquid-glass-card p-4 liquid-glass-hover", className)}>
+    <div className={cn("glass-elevated apple-spacing-lg apple-hover group cursor-pointer", className)}>
       <div className="flex items-start justify-between">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-muted-foreground">{symbol}</span>
-            {isNeutral ? (
-              <Minus className="h-3 w-3 text-muted-foreground" />
-            ) : isPositive ? (
-              <TrendingUp className="h-3 w-3 text-profit" />
-            ) : (
-              <TrendingDown className="h-3 w-3 text-loss" />
-            )}
+        <div className="space-y-2 flex-1">
+          <div className="flex items-center gap-3">
+            <span className="apple-body text-xs font-medium opacity-60 uppercase tracking-wider">{symbol}</span>
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110 ${
+              isNeutral 
+                ? 'bg-neutral/20' 
+                : isPositive 
+                  ? 'bg-profit/20 group-hover:bg-profit/30' 
+                  : 'bg-loss/20 group-hover:bg-loss/30'
+            }`}>
+              {isNeutral ? (
+                <Minus className="h-3 w-3 text-muted-foreground" />
+              ) : isPositive ? (
+                <TrendingUp className="h-3 w-3 text-profit" />
+              ) : (
+                <TrendingDown className="h-3 w-3 text-loss" />
+              )}
+            </div>
           </div>
-          <div className="text-xs text-muted-foreground truncate max-w-20">{name}</div>
+          <div className="apple-subtitle text-sm font-medium truncate">{name}</div>
         </div>
         
-        <div className="text-right space-y-1">
-          <div className="text-lg font-semibold">
+        <div className="text-right space-y-2">
+          <div className="text-2xl font-light tracking-tight">
             ${data.price.toFixed(2)}
           </div>
           <div className={cn(
-            "text-xs font-medium",
-            isPositive ? "metric-positive" : isNeutral ? "text-muted-foreground" : "metric-negative"
+            "apple-body text-sm font-medium",
+            isPositive ? "text-profit" : isNeutral ? "text-muted-foreground" : "text-loss"
           )}>
             {isPositive ? "+" : ""}{data.change.toFixed(2)}
           </div>
           <div className={cn(
-            "text-xs",
+            "apple-body text-xs",
             isPositive ? "text-profit" : isNeutral ? "text-muted-foreground" : "text-loss"
           )}>
             ({isPositive ? "+" : ""}{data.changePercent.toFixed(2)}%)
@@ -64,9 +72,12 @@ export function StockWidget({ symbol, name, className }: StockWidgetProps) {
       </div>
       
       {data.volume && (
-        <div className="mt-3 pt-3 border-t border-white/10">
-          <div className="text-xs text-muted-foreground">
-            Vol: {(data.volume / 1000000).toFixed(1)}M
+        <div className="mt-6 pt-4 border-t border-white/10">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+            <div className="apple-body text-xs opacity-50">
+              Volume: {(data.volume / 1000000).toFixed(1)}M
+            </div>
           </div>
         </div>
       )}

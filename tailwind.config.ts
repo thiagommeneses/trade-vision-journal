@@ -79,7 +79,36 @@ export default {
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				sm: 'calc(var(--radius) - 4px)',
+				'2xl': '16px',
+				'3xl': '24px',
+				'4xl': '32px',
+			},
+			spacing: {
+				'apple-xs': '4px',
+				'apple-sm': '8px', 
+				'apple-md': '16px',
+				'apple-lg': '24px',
+				'apple-xl': '32px',
+				'apple-2xl': '48px',
+			},
+			fontSize: {
+				'apple-caption': ['11px', { lineHeight: '13px', fontWeight: '400' }],
+				'apple-footnote': ['13px', { lineHeight: '18px', fontWeight: '400' }],
+				'apple-subhead': ['15px', { lineHeight: '20px', fontWeight: '400' }],
+				'apple-callout': ['16px', { lineHeight: '21px', fontWeight: '400' }],
+				'apple-body': ['17px', { lineHeight: '22px', fontWeight: '400' }],
+				'apple-headline': ['17px', { lineHeight: '22px', fontWeight: '600' }],
+				'apple-title3': ['20px', { lineHeight: '25px', fontWeight: '400' }],
+				'apple-title2': ['22px', { lineHeight: '28px', fontWeight: '400' }],
+				'apple-title1': ['28px', { lineHeight: '34px', fontWeight: '400' }],
+				'apple-large': ['34px', { lineHeight: '41px', fontWeight: '400' }],
+			},
+			backdropBlur: {
+				'apple-light': '8px',
+				'apple-medium': '16px', 
+				'apple-heavy': '24px',
+				'apple-ultra': '40px',
 			},
 			keyframes: {
 				'accordion-down': {
