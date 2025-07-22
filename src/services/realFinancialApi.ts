@@ -161,7 +161,66 @@ export const fetchStockDataFromPolygon = async (symbol: string) => {
   return result;
 };
 
-// Fetch VIX data
+// Fetch VIX data from Investing.com
+export const fetchVIXFromInvesting = async () => {
+  const cacheKey = 'vix_investing';
+  const cached = getCachedData(cacheKey);
+  if (cached) return cached;
+
+  if (!checkRateLimit('investing', 10)) {
+    throw new Error('Rate limit exceeded for Investing.com');
+  }
+
+  try {
+    const response = await fetch('https://br.investing.com/indices/volatility-s-p-500-chart', {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'pt-BR,pt;q=0.9,en;q=0.8',
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const html = await response.text();
+    
+    // Extract VIX data using regex patterns from the HTML
+    const priceMatch = html.match(/data-test="instrument-price-last">([0-9,]+)/);
+    const changeMatch = html.match(/data-test="instrument-price-change">[+\-]?([0-9,]+)/);
+    const changePercentMatch = html.match(/data-test="instrument-price-change-percent">\([+\-]?([0-9,]+)/);
+    
+    if (!priceMatch || !changeMatch || !changePercentMatch) {
+      throw new Error('Could not parse VIX data from Investing.com');
+    }
+
+    const price = parseFloat(priceMatch[1].replace(',', '.'));
+    const change = parseFloat(changeMatch[1].replace(',', '.'));
+    const changePercent = parseFloat(changePercentMatch[1].replace(',', '.'));
+    
+    // Determine if change is positive or negative based on the HTML class or text
+    const isNegative = html.includes('text-negative-main') || html.includes('text-loss') || 
+                      html.match(/data-test="instrument-price-change">-/);
+    const actualChange = isNegative ? -change : change;
+    const actualChangePercent = isNegative ? -changePercent : changePercent;
+
+    const vixData = {
+      value: price,
+      change: actualChange,
+      changePercent: actualChangePercent,
+      timestamp: new Date().toISOString()
+    };
+
+    setCachedData(cacheKey, vixData);
+    return vixData;
+  } catch (error) {
+    console.error('Error fetching VIX from Investing.com:', error);
+    throw error;
+  }
+};
+
+// Fetch VIX data from Yahoo Finance
 export const fetchVIXFromYahoo = async () => {
   const cacheKey = 'vix_yahoo';
   const cached = getCachedData(cacheKey);

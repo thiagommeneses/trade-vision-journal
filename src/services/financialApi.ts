@@ -4,6 +4,7 @@ import {
   fetchStockDataFromFMP, 
   fetchStockDataFromPolygon,
   fetchVIXFromYahoo,
+  fetchVIXFromInvesting,
   fetchCommoditiesFromYahoo,
   fetchRealFinancialNews,
   fetchBrazilianFutures
@@ -198,26 +199,36 @@ export const fetchCommodities = async (): Promise<CommodityData[]> => {
 export const fetchVIX = async (): Promise<VIXData> => {
   console.log('Fetching real VIX data...');
   
-  try {
-    const data = await fetchVIXFromYahoo();
-    console.log('Successfully fetched VIX from Yahoo Finance');
-    return data;
-  } catch (error) {
-    console.warn('Failed to fetch real VIX data:', error);
-    
-    // Fallback to mock data
-    await new Promise(resolve => setTimeout(resolve, 100));
-    
-    const baseVIX = 18.5;
-    const change = (Math.random() - 0.5) * 2;
-    
-    return {
-      value: baseVIX + change,
-      change,
-      changePercent: (change / baseVIX) * 100,
-      timestamp: new Date().toISOString()
-    };
+  // Try Investing.com first, then Yahoo Finance as fallback
+  const apiMethods = [
+    () => fetchVIXFromInvesting(),
+    () => fetchVIXFromYahoo()
+  ];
+
+  for (const apiMethod of apiMethods) {
+    try {
+      const data = await apiMethod();
+      console.log('Successfully fetched VIX data');
+      return data;
+    } catch (error) {
+      console.warn('VIX API call failed:', error);
+      continue;
+    }
   }
+  
+  // Fallback to mock data if all APIs fail
+  console.warn('All VIX APIs failed, using mock data');
+  await new Promise(resolve => setTimeout(resolve, 100));
+  
+  const baseVIX = 18.5;
+  const change = (Math.random() - 0.5) * 2;
+  
+  return {
+    value: baseVIX + change,
+    change,
+    changePercent: (change / baseVIX) * 100,
+    timestamp: new Date().toISOString()
+  };
 };
 
 export const fetchFinancialNews = async (): Promise<NewsItem[]> => {
